@@ -26,16 +26,21 @@ router.post('/add', upload, (req, res)=> {
         phone: req.body.phone,
         image: req.file.filename
     });
-    user.save((err)=>{
-        if(err){
-            res.json({message: err.message, type: "danger"});
-        } else {
-            req.session.message = {
-                type: 'suc'
-            }
-        }
+    user.save()
+    .then((result)=> {
+        req.session.message = {
+            type: 'success',
+            message: 'User added successfully!'
+        };
+        res.redirect('/')
     })
+    .catch((err)=> {
+        res.json({message: err.message, type: "danger"});
+        console.log(err)
+    });
 })
+
+
 
 router.get('/', (req, res)=> {
     res.render('index', {title: "homepage"});

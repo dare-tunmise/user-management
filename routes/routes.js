@@ -108,4 +108,19 @@ router.post('/update/:id', upload, (req, res)=> {
 
 })
 
+//delete user route
+
+router.get('/delete/:id', (req, res)=> {
+    let id = req.params.id;
+    User.findByIdAndDelete(id, (err, result)=> {
+        if(result.image != '') {
+            try {
+                fs.unlinkSync('./uploads/'+result.image);
+            } catch(err) {
+                console.log(err)
+            }
+        }
+    })
+})
+
 module.exports = router;

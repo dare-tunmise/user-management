@@ -20,7 +20,6 @@ var upload = multer({
 }).single("image");
 
 //insert user into database
-
 router.post('/add', upload, (req, res)=> {
     const user = new User({
         name: req.body.name,
@@ -109,17 +108,27 @@ router.post('/update/:id', upload, (req, res)=> {
 })
 
 //delete user route
-
 router.get('/delete/:id', (req, res)=> {
     let id = req.params.id;
-    User.findByIdAndDelete(id, (err, result)=> {
+    User.findByIdAndDelete(id)
+    .then((result)=> {
         if(result.image != '') {
             try {
                 fs.unlinkSync('./uploads/'+result.image);
             } catch(err) {
                 console.log(err)
             }
-        }
+        }  
+    })
+    .then((result)=> {
+            req.session.message= {
+                type: 'info',
+                message: "User successfully Deleted!"
+            };
+            res.redirect('/');      
+    })
+    .catch((err)=> {
+        res.json({ message: err.message})
     })
 })
 

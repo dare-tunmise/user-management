@@ -19,6 +19,7 @@ db.once("open", ()=> console.log("connected to the database!"));
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 
+
 app.use(session({
     secret: 'my secret key',
     saveUninitialized: true,
@@ -31,6 +32,8 @@ app.use((req, res, next)=> {
     delete req.session.message;
     next();
 });
+
+app.use(express.static('uploads'))
 
 //set template engines
 app.set('view engine', 'ejs');

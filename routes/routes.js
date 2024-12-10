@@ -41,9 +41,15 @@ router.post('/add', upload, (req, res)=> {
 })
 
 
-
+//Get all users route
 router.get('/', (req, res)=> {
-    res.render('index', {title: "homepage"});
+   User.find()
+   .then((result)=>{
+    res.render('index', {title: 'Home Page', users: result});
+   })
+   .catch((err)=> {
+     res.json({ message: err.message});
+   })
 });
 
 router.get('/add', (req, res)=> {
